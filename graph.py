@@ -28,21 +28,21 @@ class digraph:
         self.edge(from_node, to_node)
         self.edge(to_node, from_node)
 
-    def nodes_depth_first(self,root,visited=None):
+    def nodes_depth_first(self,root):
         """Iterate nodes in depth-first order starting at root"""
         assert root in self.edgelists, "Must designate a root node in the graph"
-        if not visited:
-            visited = set()
+        yield from self._nodes_dfs(root, set())
+
+    def _nodes_dfs(self, root, visited):
+        """Depth-first traversal of graph"""
+        if root in visited:
+            return
         visited.add(root)
         yield root
         for adjacent in self.edgelists[root]:
-            if adjacent not in visited: 
-                yield from self.nodes_depth_first(adjacent,visited)
+            yield from self._nodes_dfs(adjacent,visited)
         return
 
-    ## Note:  'visited' default is 'None', and not 'set()', because
-    ## putting set() as the default would create one set object that
-    ## would be modified ... this is a common error with default arguments. 
 
 
 # Some connections in Oregon and Washington, to Vancouver BC
